@@ -44,5 +44,4 @@ jobs:
 
     - name: Push Docker image to Amazon ECR
       run: |
-     ###   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
