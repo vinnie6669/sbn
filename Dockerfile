@@ -1,10 +1,10 @@
 # Use AlmaLinux 9 as the base image
-FROM almalinux:9
+FROM almalinux:9.6
 
 # Install Apache HTTP Server (httpd)
-RUN dnf update -y && \
-    dnf install -y httpd && \
-    dnf clean all
+RUN dnf update -y 
+RUN dnf install -y httpd 
+#    dnf clean all
 
 # Expose port 80, the default HTTP port
 EXPOSE 80
