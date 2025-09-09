@@ -1,0 +1,46 @@
+name: CI/CD to AWS ECR and ECS
+
+on:
+  push:
+    branches:
+      - master # Or your desired branch
+
+env:
+  AWS_REGION: ap-southeast-7 # Replace with your AWS region
+  ECR_REPOSITORY: sabina/dev # Replace with your ECR repository name
+  ECS_CLUSTER_NAME: your-ecs-cluster-name # Replace with your ECS cluster name
+  ECS_SERVICE_NAME: your-ecs-service-name # Replace with your ECS service name
+  TASK_DEFINITION_PATH: your-task-definition.json # Path to your ECS task definition file
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build and tag Docker image
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }} # Using commit SHA as image tag
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+    - name: Push Docker image to Amazon ECR
+      run: |
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
