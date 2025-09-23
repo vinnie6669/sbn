@@ -7,8 +7,8 @@ on:
 
 env:
   AWS_REGION: ap-southeast-7 # Replace with your AWS region
-  AWS_ACCESS_KEY_ID: AKIAWLV37LFENZ37SVM3
-  AWS_SECRET_ACCESS_KEY: lMo4zj9SQvukHe7iEPTmL2W1jzF8vfHrn/jqJrpA
+  AWS_ACCESS_KEY_ID: 
+  AWS_SECRET_ACCESS_KEY: l
   ECR_REPOSITORY: sabina/dev # Replace with your ECR repository name
   ECS_CLUSTER_NAME: your-ecs-cluster-name # Replace with your ECS cluster name
   ECS_SERVICE_NAME: your-ecs-service-name # Replace with your ECS service name
